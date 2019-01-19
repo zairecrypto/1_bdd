@@ -23,4 +23,58 @@
 4. create test database
     - MIX_ENV=test mix ecto.create
 
-5. run white_bread.run
+5. run mix white_bread.run
+
+-----------------------------
+
+6. add scenario steps to white_bread_context.exs
+    repeat until All features passed.
+
+7. add Hound.Helpers and modules
+
+    defmodule WhiteBreadContext do
+        ...
+        use Hound.Helpers
+        
+        feature_starting_state fn  ->
+            Application.ensure_all_started(:hound)
+            %{}
+        end
+        scenario_starting_state fn _state ->
+            Hound.start_session
+            %{}
+        end
+        scenario_finalize fn _status, _state -> 
+            Hound.end_session
+        end
+
+        ...
+    end
+
+8. edit scenario steps to ensure test are successful 
+    useful commands
+
+    navigate_to "/new" : 
+        - add route if necessaire : resources "/bookings", BookingController
+        - add controller:
+            defmodule BddWeb.TestController do
+            use BddWeb, :controller
+
+            def new(conn, _params) do
+                render conn, "new.html"
+            end
+            end
+        - add view
+            defmodule BddWeb.TestView do
+                use BddWeb, :view
+            end
+        - add model (html)
+    
+    fill_field({:id, "arg1"}, state[:arg1]):
+        - :id referes to the html object in the model we are navigating
+        - state value is taken from above scenario
+    
+    click({:id, "submit_button"})
+
+    assert visible_in_page? ~r/Your taxi will arrive in \d+ minutes/
+    

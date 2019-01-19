@@ -1,0 +1,3 @@
+<input id="arg1">
+<input id="arg2">
+<button id="submit_button">Submit</button>
