@@ -1,0 +1,26 @@
+1. create features/myfeat.feature
+2. add deps in mix.exs
+    def project do
+        [
+            ...
+            preferred_cli_env: ["white_bread.run": :test],
+            ...
+        ]
+    end
+    defp deps do
+        [
+            ...
+            {:white_bread, "~> 4.3", only: [:test]},  
+            {:hound, "~> 1.0"}
+        ]
+    end
+3. finish config in config/test.exs
+    - change server: false to true
+    - add bellow 
+        config :hound, driver: "chrome_drive"
+        config :white_bread, sql_sandbox: true
+
+4. create test database
+    - MIX_ENV=test mix ecto.create
+
+5. run white_bread.run
